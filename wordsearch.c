@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <math.h>
 
 // Declarations of the two functions you will implement
@@ -102,7 +101,7 @@ void cleanUp(int** answers, int size){
 
 void upperCase(char* word){
     int x = 0;
-    // while(*(word + x) != 0){
+    while(*(word + x) != 0){
     //     *(word + x) = toupper(*(word + x));
     //     x++;
     // }
@@ -182,6 +181,7 @@ void upperCase(char* word){
     } else if(*(word + x) == 'z'){
         *(word + x) = 'Z';
         x++;
+    }
     }
 }
 
