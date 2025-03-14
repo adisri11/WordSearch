@@ -101,7 +101,6 @@ void cleanUp(int** answers, int size){
 
 
 void upperCase(char* word){
-    void upperCase(char* word){
     int x = 0;
     // while(*(word + x) != 0){
     //     *(word + x) = toupper(*(word + x));
@@ -184,7 +183,6 @@ void upperCase(char* word){
         *(word + x) = 'Z';
         x++;
     }
-}
 }
 
 
