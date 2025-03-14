@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <math.h>
 
 // Declarations of the two functions you will implement
@@ -63,6 +62,8 @@ int main(int argc, char **argv) {
 }
 
 void printPuzzle(char** arr) {
+    printf("\n");
+    printf("Printing puzzle before search:\n");
     for(int i = 0; i < bSize; i++){
         for(int j = 0; j < bSize; j++){
             printf("%c ", *(*(arr + i) + j));
@@ -78,9 +79,10 @@ void printPuzzle(char** arr) {
 }
 
 void printAnswers(int** answers, int size){
+    printf("Printing the search path:\n");
     for(int i = 0; i < size; i++){
         for(int j = 0; j < size; j++){
-            printf("%d ", *(*(answers + i) + j));
+            printf("%d\t", *(*(answers + i) + j));
         }
         printf("\n");
     }
@@ -94,7 +96,6 @@ void cleanUp(int** answers, int size){
 			*(*(answers + i) + j) = 0;
 		}
 	}
-    printAnswers(answers,bSize);
 }
 
 
@@ -193,7 +194,11 @@ void nextElement(char** arr, int** mat, char* word, int x, int y, int length, in
         y--;
         cont(arr, mat, word, x, y, length, index);
     } else{
-        firstElement(arr, word, bSize, x + 1, y);
+        if(y + 1 < bSize){
+            firstElement(arr, word, bSize, x, y + 1);
+        } else {
+            firstElement(arr, word, bSize, x + 1, y - bSize + 1);
+        }
         //printf("no word\n");
     }   
 }
@@ -212,9 +217,7 @@ void searchPuzzle(char** arr, char* word) {
     }
     upperCase(word);
     firstElement(arr, word, bSize, 0, 0);
-    printf("Puzzle: \n");
     printPuzzle(arr);
-    printf("Answers: \n");
     printAnswers(answers,bSize);
 
 
