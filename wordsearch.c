@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 // Declarations of the two functions you will implement
 // Feel free to declare any helper functions or global variables
 void printPuzzle(char** arr);
 void searchPuzzle(char** arr, char* word);
-void firstElement(char** arr, char* word,int size);
+void firstElement(char** arr, char* word,int size, int x, int y);
 void nextElement(char** arr, int** mat, char* word, int x, int y, int length, int index);
 void cont(char** arr, int** mat, char* word, int x, int y, int length, int index);
 int bSize;
@@ -62,21 +63,18 @@ int main(int argc, char **argv) {
 }
 
 void printPuzzle(char** arr) {
+    for(int i = 0; i < bSize; i++){
+        for(int j = 0; j < bSize; j++){
+            printf("%c ", *(*(arr + i) + j));
+        }
+        printf("\n");
+    }
+    printf("\n");
 	// This function will print out the complete puzzle grid (arr). 
     // It must produce the output in the SAME format as the samples 
     // in the instructions.
     // Your implementation here...
 
-}
-
-
-void cleanUp(int** answers, int size){
-    for(int i = 0; i < size; i++){
-        *(answers + i) = (int*)malloc(size * sizeof(int));
-		for(int j = 0; j < size; j++){
-			*(*(answers + i) + j) = 0;
-		}
-	}
 }
 
 void printAnswers(int** answers, int size){
@@ -86,7 +84,19 @@ void printAnswers(int** answers, int size){
         }
         printf("\n");
     }
+    printf("\n");
 }
+
+void cleanUp(int** answers, int size){
+    for(int i = 0; i < size; i++){
+        //*(answers + i) = (int*)malloc(size * sizeof(int));
+		for(int j = 0; j < size; j++){
+			*(*(answers + i) + j) = 0;
+		}
+	}
+    printAnswers(answers,bSize);
+}
+
 
 void upperCase(char* word){
     int x = 0;
@@ -102,21 +112,29 @@ void upperCase(char* word){
 // size of the array
 
 // takes in new matrix that is the answers 
-void firstElement(char** arr, char* word,int size){
-    answers = (int**)malloc(bSize * sizeof(int*));
+void firstElement(char** arr, char* word,int size, int x, int y){
     cleanUp(answers, bSize);
     char look = *(word);
-    char check;
+    char check = '0';
+    int length = strlen(word);
 
     for(int i = 0; i < bSize; i++){
         for(int j = 0; j < bSize; j++){
-            check = *(*(arr + i) + j);
-            if(check == look){
-                *(*(answers + i) + j) = 1;
+            if(x + i < bSize && y + j < bSize){
+                check = *(*(arr + x + i) + y + j);
+                if(check == look){
+                    *(*(answers + x + i) + y + j) = 1;
                 // call next element 
                 // change this to one so add 1 /*done */
-                nextElement(arr,answers,word, i, j, 5, 1);
+                    if (length > 1){
+                        nextElement(arr,answers,word, x + i, y + j, length, 1);
+                    }
+                    //break;
                 // give x and y value for second element function
+                }
+            }
+            if(check == look){
+                break;
             }
         }
         if(check == look){
@@ -126,50 +144,57 @@ void firstElement(char** arr, char* word,int size){
 }
 
 void cont(char** arr, int** mat, char* word, int x, int y, int length, int index){
-    if(index + 1 < length){
-            nextElement(arr, mat, word, x, y, length, index + 1);
+    index++;
+    if(*(*(mat + x) + y) == 0){
+        *(*(mat + x) + y) = index;
+    } else if (*(*(mat + x) + y) != 0) {
+        int n = 1;
+        int temp = *(*(mat + x) + y);
+        while (temp >= 10){
+            temp /= 10;
+            n++;
+        }
+        int power = pow(10, n);
+        *(*(mat + x) + y) += ((index)*power);
+    }
+
+    if(index < length){
+            nextElement(arr, mat, word, x, y, length, index);
         }
 };
 
 void nextElement(char** arr, int** mat, char* word, int x, int y, int length, int index){
     if(*(word + index) == *(*(arr + x + 1) + y)){
-        *(*(mat + x + 1) + y) = index + 1;
         x++;
         cont(arr, mat, word, x, y, length, index);
     } else if (*(word + index) == *(*(arr + x - 1) + y)){
-        *(*(mat + x - 1) + y) = index + 1;
         x--;
         cont(arr, mat, word, x, y, length, index);
     } else if (*(word + index) == *(*(arr + x) + y + 1)){
-        *(*(mat + x) + y + 1) = index + 1;
         y++;
         cont(arr, mat, word, x, y, length, index);
     } else if (*(word + index) == *(*(arr + x) + y - 1)){
-        *(*(mat + x) + y - 1) = index + 1;
         y--;
         cont(arr, mat, word, x, y, length, index);
     } else if (*(word + index) == *(*(arr + x - 1) + y + 1)){
-        *(*(mat + x - 1) + y + 1) = index + 1;
         x--;
         y++;
         cont(arr, mat, word, x, y, length, index);
     } else if (*(word + index) == *(*(arr + x + 1) + y + 1)){
-        *(*(mat + x + 1) + y + 1) = index + 1;
         x++;
         y++;
         cont(arr, mat, word, x, y, length, index);
     } else if (*(word + index) == *(*(arr + x + 1) + y - 1)){
-        *(*(mat + x + 1) + y - 1) = index + 1;
         x++;
         y--;
         cont(arr, mat, word, x, y, length, index);
     } else if (*(word + index) == *(*(arr + x - 1) + y - 1)){
-        *(*(mat + x - 1) + y - 1) = index + 1;
         x--;
         y--;
         cont(arr, mat, word, x, y, length, index);
     } else{
-        firstElement(arr, word, bSize);
+        firstElement(arr, word, bSize, x + 1, y);
+        //printf("no word\n");
     }   
 }
 
@@ -181,8 +206,15 @@ void searchPuzzle(char** arr, char* word) {
     // Your implementation here...
 
     // int **answers = (int**)malloc(bSize * sizeof(int*));
+    answers = (int**)malloc(bSize * sizeof(int*));
+    for(int i = 0; i < bSize; i++){
+        *(answers + i) = (int*)malloc(bSize * sizeof(int));
+    }
     upperCase(word);
-    firstElement(arr, word, bSize);
+    firstElement(arr, word, bSize, 0, 0);
+    printf("Puzzle: \n");
+    printPuzzle(arr);
+    printf("Answers: \n");
     printAnswers(answers,bSize);
 
 
