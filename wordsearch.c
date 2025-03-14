@@ -101,11 +101,90 @@ void cleanUp(int** answers, int size){
 
 
 void upperCase(char* word){
+    void upperCase(char* word){
     int x = 0;
-    while(*(word + x) != 0){
-        *(word + x) = toupper(*(word + x));
+    // while(*(word + x) != 0){
+    //     *(word + x) = toupper(*(word + x));
+    //     x++;
+    // }
+
+    if(*(word + x) == 'a'){
+        *(word + x) = 'A';
+        x++;
+    } else if(*(word + x) == 'b'){
+        *(word + x) = 'B';
+        x++;
+    } else if(*(word + x) == 'c'){
+        *(word + x) = 'C';
+        x++;
+    } else if(*(word + x) == 'd'){
+        *(word + x) = 'D';
+        x++;
+    } else if(*(word + x) == 'e'){
+        *(word + x) = 'E';
+        x++;
+    } else if(*(word + x) == 'f'){
+        *(word + x) = 'F';
+        x++;
+    } else if (*(word + x) == 'g'){
+        *(word + x) = 'G';
+        x++;
+    } else if(*(word + x) == 'h'){
+        *(word + x) = 'H';
+        x++;
+    } else if(*(word + x) == 'i'){
+        *(word + x) = 'I';
+        x++;
+    } else if(*(word + x) == 'j'){
+        *(word + x) = 'J';
+        x++;
+    } else if (*(word + x) == 'k'){
+        *(word + x) = 'K';
+        x++;
+    } else if (*(word + x) == 'l'){
+        *(word + x) = 'L';
+        x++;
+    } else if(*(word + x) == 'm'){
+        *(word + x) = 'M';
+        x++;
+    } else if(*(word + x) == 'n'){
+        *(word + x) = 'N';
+        x++;
+    } else if (*(word + x) == 'o'){
+        *(word + x) = 'O';
+        x++;
+    } else if(*(word + x) == 'p'){
+        *(word + x) = 'P';
+        x++;
+    } else if(*(word + x) == 'q'){
+        *(word + x) = 'Q';
+        x++;
+    } else if(*(word + x) == 'r'){
+        *(word + x) = 'R';
+        x++;
+    } else if(*(word + x) == 's'){
+        *(word + x) = 'S';
+        x++;
+    } else if(*(word + x) == 't'){
+        *(word + x) = 'T';
+        x++;
+    } else if(*(word + x) == 'v'){
+        *(word + x) = 'V';
+        x++;
+    } else if(*(word + x) == 'w'){
+        *(word + x) = 'W';
+        x++;
+    } else if(*(word + x) == 'x'){
+        *(word + x) = 'X';
+        x++;
+    } else if(*(word + x) == 'y'){
+        *(word + x) = 'Y';
+        x++;
+    } else if(*(word + x) == 'z'){
+        *(word + x) = 'Z';
         x++;
     }
+}
 }
 
 
