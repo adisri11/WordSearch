@@ -78,7 +78,59 @@ void printPuzzle(char** arr) {
 
 }
 
+void isItThere(int** answers){
+    int find = 0;
+    int last = -1;
+    int change = -1;
+
+    int found = -1;
+
+    for(int i = 0; i < bSize; i++){
+        for(int j = 0; j < bSize; j++){
+            last = *(*(answers + i) + j);
+
+            if(last > 9){
+                if(found == 1){
+                    find = 1;
+                    break;
+                }
+
+                change = last;
+                while(change != 0){
+                    int lastDigit = change % 10;
+
+                    if(lastDigit == bSize){
+                        found = 1;
+                        break;
+                    }
+                    change /= 10;
+                }
+
+
+
+            } else {
+                if(last == bSize){
+                    find = 1;
+                    break;
+                }
+            }
+
+
+        }
+
+        if(find == 1){
+            printf("Word found!\n");
+            break;
+        } 
+    }
+
+    if(find == 0){
+        printf("Word not found!\n");
+    }
+}
+
 void printAnswers(int** answers, int size){
+	isItThere(answers);
     printf("Printing the search path:\n");
     for(int i = 0; i < size; i++){
         for(int j = 0; j < size; j++){
@@ -106,82 +158,84 @@ void upperCase(char* word){
     //     x++;
     // }
 
-    if(*(word + x) == 'a'){
-        *(word + x) = 'A';
-        x++;
-    } else if(*(word + x) == 'b'){
-        *(word + x) = 'B';
-        x++;
-    } else if(*(word + x) == 'c'){
-        *(word + x) = 'C';
-        x++;
-    } else if(*(word + x) == 'd'){
-        *(word + x) = 'D';
-        x++;
-    } else if(*(word + x) == 'e'){
-        *(word + x) = 'E';
-        x++;
-    } else if(*(word + x) == 'f'){
-        *(word + x) = 'F';
-        x++;
-    } else if (*(word + x) == 'g'){
-        *(word + x) = 'G';
-        x++;
-    } else if(*(word + x) == 'h'){
-        *(word + x) = 'H';
-        x++;
-    } else if(*(word + x) == 'i'){
-        *(word + x) = 'I';
-        x++;
-    } else if(*(word + x) == 'j'){
-        *(word + x) = 'J';
-        x++;
-    } else if (*(word + x) == 'k'){
-        *(word + x) = 'K';
-        x++;
-    } else if (*(word + x) == 'l'){
-        *(word + x) = 'L';
-        x++;
-    } else if(*(word + x) == 'm'){
-        *(word + x) = 'M';
-        x++;
-    } else if(*(word + x) == 'n'){
-        *(word + x) = 'N';
-        x++;
-    } else if (*(word + x) == 'o'){
-        *(word + x) = 'O';
-        x++;
-    } else if(*(word + x) == 'p'){
-        *(word + x) = 'P';
-        x++;
-    } else if(*(word + x) == 'q'){
-        *(word + x) = 'Q';
-        x++;
-    } else if(*(word + x) == 'r'){
-        *(word + x) = 'R';
-        x++;
-    } else if(*(word + x) == 's'){
-        *(word + x) = 'S';
-        x++;
-    } else if(*(word + x) == 't'){
-        *(word + x) = 'T';
-        x++;
-    } else if(*(word + x) == 'v'){
-        *(word + x) = 'V';
-        x++;
-    } else if(*(word + x) == 'w'){
-        *(word + x) = 'W';
-        x++;
-    } else if(*(word + x) == 'x'){
-        *(word + x) = 'X';
-        x++;
-    } else if(*(word + x) == 'y'){
-        *(word + x) = 'Y';
-        x++;
-    } else if(*(word + x) == 'z'){
-        *(word + x) = 'Z';
-        x++;
-    }
+        if(*(word + x) == 'a'){
+            *(word + x) = 'A';
+            x++;
+        } else if(*(word + x) == 'b'){
+            *(word + x) = 'B';
+            x++;
+        } else if(*(word + x) == 'c'){
+            *(word + x) = 'C';
+            x++;
+        } else if(*(word + x) == 'd'){
+            *(word + x) = 'D';
+            x++;
+        } else if(*(word + x) == 'e'){
+            *(word + x) = 'E';
+            x++;
+        } else if(*(word + x) == 'f'){
+            *(word + x) = 'F';
+            x++;
+        } else if (*(word + x) == 'g'){
+            *(word + x) = 'G';
+            x++;
+        } else if(*(word + x) == 'h'){
+            *(word + x) = 'H';
+            x++;
+        } else if(*(word + x) == 'i'){
+            *(word + x) = 'I';
+            x++;
+        } else if(*(word + x) == 'j'){
+            *(word + x) = 'J';
+            x++;
+        } else if (*(word + x) == 'k'){
+            *(word + x) = 'K';
+            x++;
+        } else if (*(word + x) == 'l'){
+            *(word + x) = 'L';
+            x++;
+        } else if(*(word + x) == 'm'){
+            *(word + x) = 'M';
+            x++;
+        } else if(*(word + x) == 'n'){
+            *(word + x) = 'N';
+            x++;
+        } else if (*(word + x) == 'o'){
+            *(word + x) = 'O';
+            x++;
+        } else if(*(word + x) == 'p'){
+            *(word + x) = 'P';
+            x++;
+        } else if(*(word + x) == 'q'){
+            *(word + x) = 'Q';
+            x++;
+        } else if(*(word + x) == 'r'){
+            *(word + x) = 'R';
+            x++;
+        } else if(*(word + x) == 's'){
+            *(word + x) = 'S';
+            x++;
+        } else if(*(word + x) == 't'){
+            *(word + x) = 'T';
+            x++;
+        } else if(*(word + x) == 'v'){
+            *(word + x) = 'V';
+            x++;
+        } else if(*(word + x) == 'w'){
+            *(word + x) = 'W';
+            x++;
+        } else if(*(word + x) == 'x'){
+            *(word + x) = 'X';
+            x++;
+        } else if(*(word + x) == 'y'){
+            *(word + x) = 'Y';
+            x++;
+        } else if(*(word + x) == 'z'){
+            *(word + x) = 'Z';
+            x++;
+        } else {
+            x++;
+        }
     }
 }
 
