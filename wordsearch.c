@@ -80,7 +80,6 @@ void printPuzzle(char** arr) {
 
 }
 
-
 void printAnswers(int** answers, int size){
 	int find = 0;
     int last = -1;
@@ -140,17 +139,8 @@ void printAnswers(int** answers, int size){
     }
 }
 
-void cleanUp(int** answers, int size){
-    for(int i = 0; i < size; i++){
-        //*(answers + i) = (int*)malloc(size * sizeof(int));
-		for(int j = 0; j < size; j++){
-			*(*(answers + i) + j) = 0;
-		}
-	}
-}
-
-void copy(int **answers, int **copy){                           //if the element in answer matrix is not 0 then make the path
-    for(int i = 0; i < bSize; i++){                             //matrix element at the same index the equivalent
+void copy(int **answers, int **path){
+    for(int i = 0; i < bSize; i++){
 		for(int j = 0; j < bSize; j++){
             if (*(*(answers + i) + j) != 0){
                 *(*(path + i) + j) = *(*(answers + i) + j);
@@ -158,13 +148,22 @@ void copy(int **answers, int **copy){                           //if the element
 		}
 	}
 
-    for(int i = 0; i < bSize; i++){
-                for(int j = 0; j < bSize; j++){
-                    printf("%d\t", *(*(path + i) + j));
-                }
-                printf("\n");
-            }
-            printf("\n");
+    // for(int i = 0; i < bSize; i++){
+    //             for(int j = 0; j < bSize; j++){
+    //                 printf("%d\t", *(*(path + i) + j));
+    //             }
+    //             printf("\n");
+    //         }
+            // printf("\n");
+}
+
+void cleanUp(int** answers, int size){
+    for(int i = 0; i < size; i++){
+        //*(answers + i) = (int*)malloc(size * sizeof(int));
+		for(int j = 0; j < size; j++){
+			*(*(answers + i) + j) = 0;
+		}
+	}
 }
 
 
@@ -235,6 +234,9 @@ void upperCase(char* word){
         } else if(*(word + x) == 't'){
             *(word + x) = 'T';
             x++;
+        } else if(*(word + x) == 'u'){
+            *(word + x) = 'U';
+            x++;
         } else if(*(word + x) == 'v'){
             *(word + x) = 'V';
             x++;
@@ -260,38 +262,47 @@ void upperCase(char* word){
 // need to take in the array // and need to take in the word // and also the size
 // take the char of the array 
 // size of the array
+
 // takes in new matrix that is the answers 
 void firstElement(char** arr, char* word, int x, int y){
     char look = *(word);
     char check = '0';
     int length = strlen(word);
-    printf("%d, ", x);
-    printf("%d\n", y);
 
-    for(int i = x; i < bSize; i++){
-        for(int j = y; j < bSize; j++){
-            if(x + i < bSize && y + j < bSize){
-                count++;
-                check = *(*(arr + i) + j);
-                if(check == look) { 
-                    if(*(*(path + i) + j) != 0){                            //if the element in path isnt equal to 0 then check
-                        if(j + 1 < bSize){                                  // if column you are in is less than bSize, if it is
-                            firstElement(arr, word, i, j + 1);              // call first element again but starting from the next
-                        } else {                                            //letter, if not then start from next row
-                            firstElement(arr, word, i + 1, j - bSize + 1);
-                        }
-                    } else {
-                        *(*(answers + i) + j) = 1;
-                        if (length > 1){
-                            printf("next\n");
-                            nextElement(arr,answers,word, i, j, length, 1);
-                        }
+    for(int i = 0; i < bSize; i++){
+        for(int j = 0; j < bSize; j++){
+            if (x + i >= bSize || count >= pow(bSize,2)){
+                break;
+            } else if(x + i < bSize && y + j < bSize){
+                check = *(*(arr + x + i) + y + j);
+                if(check == look){
+                    *(*(answers + x + i) + y + j) = 1;
+                // call next element 
+                // change this to one so add 1 /*done */
+                    if (length > 1){
+                        nextElement(arr,answers,word, x + i, y + j, length, 1);
                     }
+                    //break;
+                // give x and y value for second element function
                 }
+            } else if (x + i + 1 < bSize && y + j >= bSize){
+                check = *(*(arr + x + i + 1) + y + j -bSize);
+                if(check == look){
+                    *(*(answers + x + i + 1) + y + j-bSize) = 1;
+                // call next element 
+                // change this to one so add 1 /*done */
+                    if (length > 1){                    
+                        nextElement(arr,answers,word, x + i + 1, y + j - bSize, length, 1);
+                    }
+                }    
             }
+
             if(check == look){
                 break;
             }
+        }
+        if (x + i >= bSize || count >= pow(bSize,2)){
+            break;
         }
         if(check == look){
             break;
@@ -300,7 +311,6 @@ void firstElement(char** arr, char* word, int x, int y){
 }
 
 void cont(char** arr, int** mat, char* word, int x, int y, int length, int index){
-    count++;
     index++;
     if(*(*(mat + x) + y) == 0){
         *(*(mat + x) + y) = index;
@@ -316,13 +326,25 @@ void cont(char** arr, int** mat, char* word, int x, int y, int length, int index
     }
 
     if(index < length){
-            nextElement(arr, mat, word, x, y, length, index);
-    } 
-    else if (index >= length && count < pow(bSize, 2)){ //if we already went through the whole word and haven't reached
-        copy(answers,path);                             //the end of the puzzle block then start call first element and 
-        printf("new word \n");                          //start from beginning again
-        count = 0;
-        firstElement(arr, word, 0, 0);
+        count++;
+        nextElement(arr, mat, word, x, y, length, index);
+    } else if (x < bSize & count < pow(bSize, 2)){
+        copy(mat, path);
+        for(int i = 0; i < bSize; i++){
+            for(int j = 0; j < bSize; j++){
+                if(*(*(mat + i) + j) == 1){
+                    if(j + 1 < bSize){
+                        cleanUp(mat, bSize);
+                        count = i * bSize + j + 1; 
+                        firstElement(arr, word, i, j + 1);
+                    } else {
+                        cleanUp(mat, bSize);
+                        count = i * bSize + 1 + j - bSize + 1; 
+                        firstElement(arr, word, i + 1, j - bSize + 1);
+                    }
+                }
+            }
+        }
     }
 
 };
@@ -359,11 +381,11 @@ void nextElement(char** arr, int** mat, char* word, int x, int y, int length, in
         cont(arr, mat, word, x, y, length, index);
     } else{
         if(y + 1 < bSize){
+            cleanUp(answers, bSize);
             firstElement(arr, word, x, y + 1);
-            cleanUp(answers, bSize);
         } else {
-            firstElement(arr, word, x + 1, y - bSize + 1);
             cleanUp(answers, bSize);
+            firstElement(arr, word, x + 1, y - bSize + 1);
         }
     }   
 }
