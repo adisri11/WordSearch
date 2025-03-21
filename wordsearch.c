@@ -9,11 +9,13 @@ void printPuzzle(char** arr);
 void searchPuzzle(char** arr, char* word);
 void firstElement(char** arr, char* word, int x, int y);
 void nextElement(char** arr, int** mat, char* word, int x, int y, int length, int index);
-void continueSearch(char** arr, int** mat, char* word, int x, int y, int length, int index);
+void cont(char** arr, int** mat, char* word, int x, int y, int length, int index);
 int bSize;
 int count = 0;
 int **answers;
 int **path;
+int firstX;
+int firstY;
 
 // Main function, DO NOT MODIFY 	
 int main(int argc, char **argv) {
@@ -54,8 +56,8 @@ int main(int argc, char **argv) {
     // Print out original puzzle grid
 
     // need to uncomment this 
-    // printf("\nPrinting puzzle before search:\n");
-    // printPuzzle(block);
+    printf("\nPrinting puzzle before search:\n");
+    printPuzzle(block);
     
     // Call searchPuzzle to the word in the puzzle
     searchPuzzle(block, word);
@@ -64,8 +66,6 @@ int main(int argc, char **argv) {
 }
 
 void printPuzzle(char** arr) {
-    printf("\n");
-    printf("Printing puzzle before search:\n");
     for(int i = 0; i < bSize; i++){
         for(int j = 0; j < bSize; j++){
             printf("%c ", *(*(arr + i) + j));
@@ -148,22 +148,31 @@ void copy(int **answers, int **path){
 		}
 	}
 
+    // printf("copy\n");
     // for(int i = 0; i < bSize; i++){
     //             for(int j = 0; j < bSize; j++){
     //                 printf("%d\t", *(*(path + i) + j));
     //             }
     //             printf("\n");
     //         }
-            // printf("\n");
+    //         printf("\n");
 }
 
 void cleanUp(int** answers, int size){
     for(int i = 0; i < size; i++){
-        //*(answers + i) = (int*)malloc(size * sizeof(int));
 		for(int j = 0; j < size; j++){
 			*(*(answers + i) + j) = 0;
 		}
 	}
+
+    // printf("clean up\n");
+    // for(int i = 0; i < bSize; i++){
+    //             for(int j = 0; j < bSize; j++){
+    //                 printf("%d\t", *(*(path + i) + j));
+    //             }
+    //             printf("\n");
+    //         }
+    //         printf("\n");
 }
 
 
@@ -276,6 +285,8 @@ void firstElement(char** arr, char* word, int x, int y){
             } else if(x + i < bSize && y + j < bSize){
                 check = *(*(arr + x + i) + y + j);
                 if(check == look){
+                    firstX = x + i;
+                    firstY = y + j;
                     *(*(answers + x + i) + y + j) = 1;
                 // call next element 
                 // change this to one so add 1 /*done */
@@ -288,6 +299,8 @@ void firstElement(char** arr, char* word, int x, int y){
             } else if (x + i + 1 < bSize && y + j >= bSize){
                 check = *(*(arr + x + i + 1) + y + j -bSize);
                 if(check == look){
+                    firstX = x + i + 1;
+                    firstY = y + j - bSize;
                     *(*(answers + x + i + 1) + y + j-bSize) = 1;
                 // call next element 
                 // change this to one so add 1 /*done */
@@ -310,7 +323,7 @@ void firstElement(char** arr, char* word, int x, int y){
     }
 }
 
-void continueSearch(char** arr, int** mat, char* word, int x, int y, int length, int index){
+void cont(char** arr, int** mat, char* word, int x, int y, int length, int index){
     index++;
     if(*(*(mat + x) + y) == 0){
         *(*(mat + x) + y) = index;
@@ -328,7 +341,7 @@ void continueSearch(char** arr, int** mat, char* word, int x, int y, int length,
     if(index < length){
         count++;
         nextElement(arr, mat, word, x, y, length, index);
-    } else if (x < bSize & count < pow(bSize, 2)){
+    } else if (x < bSize && count < pow(bSize, 2)){
         copy(mat, path);
         for(int i = 0; i < bSize; i++){
             for(int j = 0; j < bSize; j++){
@@ -339,7 +352,7 @@ void continueSearch(char** arr, int** mat, char* word, int x, int y, int length,
                         firstElement(arr, word, i, j + 1);
                     } else {
                         cleanUp(mat, bSize);
-                        count = i * bSize + 1 + j - bSize + 1; 
+                        count = (i + 1)* bSize + j - bSize + 1; 
                         firstElement(arr, word, i + 1, j - bSize + 1);
                     }
                 }
@@ -352,45 +365,45 @@ void continueSearch(char** arr, int** mat, char* word, int x, int y, int length,
 void nextElement(char** arr, int** mat, char* word, int x, int y, int length, int index){
     if(x < bSize - 1 && *(word + index) == *(*(arr + x + 1) + y)){
         x++;
-        continueSearch(arr, mat, word, x, y, length, index);
-    } else if (x > 0 && *(word + index) == *(*(arr + x - 1) + y)){
-        x--;
-        continueSearch(arr, mat, word, x, y, length, index);
+        cont(arr, mat, word, x, y, length, index);
     } else if (y < bSize -1 && *(word + index) == *(*(arr + x) + y + 1)){
         y++;
-        continueSearch(arr, mat, word, x, y, length, index);
+        cont(arr, mat, word, x, y, length, index);
     } else if (y > 0 && *(word + index) == *(*(arr + x) + y - 1)){
         y--;
-        continueSearch(arr, mat, word, x, y, length, index);
+        cont(arr, mat, word, x, y, length, index);
+    } else if (x > 0 && *(word + index) == *(*(arr + x - 1) + y)){
+        x--;
+        cont(arr, mat, word, x, y, length, index);
     } else if (y < bSize - 1 && x > 0 && *(word + index) == *(*(arr + x - 1) + y + 1)){
         x--;
         y++;
-        continueSearch(arr, mat, word, x, y, length, index);
+        cont(arr, mat, word, x, y, length, index);
     } else if (y < bSize - 1 && x < bSize - 1 && *(word + index) == *(*(arr + x + 1) + y + 1)){
         x++;
         y++;
-        continueSearch(arr, mat, word, x, y, length, index);
+        cont(arr, mat, word, x, y, length, index);
     } else if (x < bSize - 1 && y > 0 && *(word + index) == *(*(arr + x + 1) + y - 1)){
         x++;
         y--;
-        continueSearch(arr, mat, word, x, y, length, index);
-    } else if (x > 0 && x > 0 && *(word + index) == *(*(arr + x - 1) + y - 1)){
+        cont(arr, mat, word, x, y, length, index);
+    } else if (x > 0 && y > 0 && *(word + index) == *(*(arr + x - 1) + y - 1)){
         x--;
         y--;
-        continueSearch(arr, mat, word, x, y, length, index);
+        cont(arr, mat, word, x, y, length, index);
     } else{
         if(y + 1 < bSize){
             cleanUp(answers, bSize);
-            firstElement(arr, word, x, y + 1);
+            firstElement(arr, word, firstX, firstY + 1);
         } else {
             cleanUp(answers, bSize);
-            firstElement(arr, word, x + 1, y - bSize + 1);
+            firstElement(arr, word, firstX + 1, firstY - bSize + 1);
         }
     }   
 }
 
 void searchPuzzle(char** arr, char* word) {
-    // This function checks if arr continueSearchains the search word. If the 
+    // This function checks if arr contains the search word. If the 
     // word appears in arr, it will print out a message and the path 
     // as shown in the sample runs. If not found, it will print a 
     // different message as shown in the sample runs.
@@ -407,7 +420,6 @@ void searchPuzzle(char** arr, char* word) {
     }
     upperCase(word);
     firstElement(arr, word, 0, 0);
-    printPuzzle(arr);
     printAnswers(path,bSize);
 
 
