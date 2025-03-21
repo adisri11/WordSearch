@@ -367,7 +367,6 @@ void nextElement(char** arr, int** mat, char* word, int x, int y, int length, in
         y++;
         continueSearch(arr, mat, word, x, y, length, index);
     } else if (y < bSize - 1 && x < bSize - 1 && *(word + index) == *(*(arr + x + 1) + y + 1)){
-        printf("%c", *(*(arr + x + 1) + y + 1));
         x++;
         y++;
         continueSearch(arr, mat, word, x, y, length, index);
