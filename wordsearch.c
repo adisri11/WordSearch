@@ -9,7 +9,7 @@ void printPuzzle(char** arr);
 void searchPuzzle(char** arr, char* word);
 void firstElement(char** arr, char* word, int x, int y);
 void nextElement(char** arr, int** mat, char* word, int x, int y, int length, int index);
-void cont(char** arr, int** mat, char* word, int x, int y, int length, int index);
+void continueSearch(char** arr, int** mat, char* word, int x, int y, int length, int index);
 int bSize;
 int count = 0;
 int **answers;
@@ -310,7 +310,7 @@ void firstElement(char** arr, char* word, int x, int y){
     }
 }
 
-void cont(char** arr, int** mat, char* word, int x, int y, int length, int index){
+void continueSearchinueSearch(char** arr, int** mat, char* word, int x, int y, int length, int index){
     index++;
     if(*(*(mat + x) + y) == 0){
         *(*(mat + x) + y) = index;
@@ -352,33 +352,33 @@ void cont(char** arr, int** mat, char* word, int x, int y, int length, int index
 void nextElement(char** arr, int** mat, char* word, int x, int y, int length, int index){
     if(x < bSize - 1 && *(word + index) == *(*(arr + x + 1) + y)){
         x++;
-        cont(arr, mat, word, x, y, length, index);
+        continueSearch(arr, mat, word, x, y, length, index);
     } else if (x > 0 && *(word + index) == *(*(arr + x - 1) + y)){
         x--;
-        cont(arr, mat, word, x, y, length, index);
+        continueSearch(arr, mat, word, x, y, length, index);
     } else if (y < bSize -1 && *(word + index) == *(*(arr + x) + y + 1)){
         y++;
-        cont(arr, mat, word, x, y, length, index);
+        continueSearch(arr, mat, word, x, y, length, index);
     } else if (y > 0 && *(word + index) == *(*(arr + x) + y - 1)){
         y--;
-        cont(arr, mat, word, x, y, length, index);
+        continueSearch(arr, mat, word, x, y, length, index);
     } else if (y < bSize - 1 && x > 0 && *(word + index) == *(*(arr + x - 1) + y + 1)){
         x--;
         y++;
-        cont(arr, mat, word, x, y, length, index);
+        continueSearch(arr, mat, word, x, y, length, index);
     } else if (y < bSize - 1 && x < bSize - 1 && *(word + index) == *(*(arr + x + 1) + y + 1)){
         printf("%c", *(*(arr + x + 1) + y + 1));
         x++;
         y++;
-        cont(arr, mat, word, x, y, length, index);
+        continueSearch(arr, mat, word, x, y, length, index);
     } else if (x < bSize - 1 && y > 0 && *(word + index) == *(*(arr + x + 1) + y - 1)){
         x++;
         y--;
-        cont(arr, mat, word, x, y, length, index);
+        continueSearch(arr, mat, word, x, y, length, index);
     } else if (x > 0 && x > 0 && *(word + index) == *(*(arr + x - 1) + y - 1)){
         x--;
         y--;
-        cont(arr, mat, word, x, y, length, index);
+        continueSearch(arr, mat, word, x, y, length, index);
     } else{
         if(y + 1 < bSize){
             cleanUp(answers, bSize);
@@ -391,7 +391,7 @@ void nextElement(char** arr, int** mat, char* word, int x, int y, int length, in
 }
 
 void searchPuzzle(char** arr, char* word) {
-    // This function checks if arr contains the search word. If the 
+    // This function checks if arr continueSearchains the search word. If the 
     // word appears in arr, it will print out a message and the path 
     // as shown in the sample runs. If not found, it will print a 
     // different message as shown in the sample runs.
