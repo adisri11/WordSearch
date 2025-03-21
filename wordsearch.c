@@ -310,7 +310,7 @@ void firstElement(char** arr, char* word, int x, int y){
     }
 }
 
-void continueSearchinueSearch(char** arr, int** mat, char* word, int x, int y, int length, int index){
+void continueSearch(char** arr, int** mat, char* word, int x, int y, int length, int index){
     index++;
     if(*(*(mat + x) + y) == 0){
         *(*(mat + x) + y) = index;
